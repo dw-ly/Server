@@ -1,4 +1,5 @@
 #include "common.h"
+// #include "CDispatcher.h"
 
 #define eventInit function<int(SEventLoop*)>
 #define eventAdd function<int(SEventLoop*, SChannel*)>
@@ -75,9 +76,11 @@ struct SEventDispatcher
     // clear eventClear(SEventLoop* event_loop);  
 };
 */
+class CDispatcher;
 struct SEventLoop
 {
-    SEventDispatcher *dispatcher;
+    // SEventDispatcher *dispatcher;
+    CDispatcher *dispatcher;
     pthread_t owner_thread_id; 
     pthread_mutex_t mutex; 
     pthread_cond_t cond; 
@@ -85,6 +88,7 @@ struct SEventLoop
     char *thread_name;
     int quit;
     void *event_dispatcher_data;
+    ~SEventLoop(){};
 };
 
 struct SChannel

@@ -8,6 +8,14 @@ CEventLoop::CEventLoop(/* args */)
 
 CEventLoop::~CEventLoop()
 {
+    if (m_event_loop->dispatcher != nullptr)
+    {
+        delete m_event_loop->dispatcher;
+    }
+    if (m_event_loop->event_dispatcher_data != nullptr)
+    {
+        delete m_event_loop->event_dispatcher_data;
+    }
     delete m_event_loop;
 }
 
@@ -23,14 +31,17 @@ void CEventLoop::init(char *thread_name)
     timeval *time;
     ChannelMap channels;
     m_channel_handle->GetChannelMap(channels);
-    m_event_loop->dispatcher = new SEventDispatcher();
-    m_event_loop->dispatcher->event_init = m_event_funcs->Init;
-    m_event_loop->dispatcher->event_add = m_event_funcs->Add;
-    m_event_loop->dispatcher->event_del = m_event_funcs->Del;
-    m_event_loop->dispatcher->event_update = m_event_funcs->Update;
-    m_event_loop->dispatcher->event_dispatch = m_event_funcs->Dispatch;
-    m_event_loop->dispatcher->event_clear = m_event_funcs->Clear;
+    m_event_loop->dispatcher = new CEpollDispatcher();
+    // m_event_loop->dispatcher = new SEventDispatcher();
+    // m_event_loop->dispatcher->event_init = m_event_funcs->Init;
+    // m_event_loop->dispatcher->event_add = m_event_funcs->Add;
+    // m_event_loop->dispatcher->event_del = m_event_funcs->Del;
+    // m_event_loop->dispatcher->event_update = m_event_funcs->Update;
+    // m_event_loop->dispatcher->event_dispatch = m_event_funcs->Dispatch;
+    // m_event_loop->dispatcher->event_clear = m_event_funcs->Clear;
+
 }
+
 
 void CEventLoop::routine()
 {
@@ -39,7 +50,7 @@ void CEventLoop::routine()
     time->tv_sec = 1;
     while (!m_event_loop->quit)
     {
-        m_event_loop->dispatcher->event_dispatch(m_event_loop, time);
+        m_event_loop->dispatcher->Dispatch(m_event_loop, time);
     }
     
 }

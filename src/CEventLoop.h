@@ -1,11 +1,11 @@
 #include "SDefine.h"
-#include "CEpollFunc.h"
 #include "CChannelHandle.h"
+#include "CEpollDispatcher.h"
+
 class CEventLoop
 {
 private:
     SEventLoop *m_event_loop;
-    CEpollFunc *m_event_funcs;
     CChannelHandle *m_channel_handle;
 public:
     CEventLoop(/* args */);
