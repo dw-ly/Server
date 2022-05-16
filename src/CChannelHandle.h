@@ -10,5 +10,6 @@ public:
     ~CChannelHandle();
     void GetChannelMap(ChannelMap &channels);
     void init(int fd, int events, eventCallBack writeCallBack, eventCallBack readCallBack, void *data);
+    int eventActivation(int fd, int revents);
 };
 

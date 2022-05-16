@@ -27,5 +27,21 @@ void CChannelHandle::init(int fd, int events, eventCallBack writeCallBack, event
     {
         m_channel_map[fd] = channel;
     }
+}
+
+int CChannelHandle::eventActivation(int fd, int revents)
+{
+    if (fd < 0)
+        return 0;
+    if (m_channel_map.find(fd) == m_channel_map.end())
+        return -1;
+    SChannel *channel = m_channel_map[fd]; 
+    assert(fd == channel->fd);    
     
+    if(revents == EVENT_READ && channel->m_readCallback != nullptr)
+        channel->m_readCallback(channel->data);
+    if(revents == EVENT_WRITE && channel->m_writeCallback != nullptr)
+        channel->m_writeCallback(channel->data);   
+    
+    return 0; //TODO
 }

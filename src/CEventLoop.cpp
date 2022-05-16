@@ -12,10 +12,10 @@ CEventLoop::~CEventLoop()
     {
         delete m_event_loop->dispatcher;
     }
-    if (m_event_loop->event_dispatcher_data != nullptr)
-    {
-        delete m_event_loop->event_dispatcher_data;
-    }
+    // if (m_event_loop->event_dispatcher_data != nullptr)
+    // {
+    //     delete m_event_loop->event_dispatcher_data;
+    // }
     delete m_event_loop;
 }
 
@@ -31,7 +31,7 @@ void CEventLoop::init(char *thread_name)
     timeval *time;
     ChannelMap channels;
     m_channel_handle->GetChannelMap(channels);
-    m_event_loop->dispatcher = new CEpollDispatcher();
+    m_event_loop->dispatcher = new CEpollDispatcher(this);
     // m_event_loop->dispatcher = new SEventDispatcher();
     // m_event_loop->dispatcher->event_init = m_event_funcs->Init;
     // m_event_loop->dispatcher->event_add = m_event_funcs->Add;
@@ -42,7 +42,10 @@ void CEventLoop::init(char *thread_name)
 
 }
 
-
+CChannelHandle *CEventLoop::getChannelHandle()
+{
+    return m_channel_handle;
+}
 void CEventLoop::routine()
 {
     assert(m_event_loop != nullptr);

@@ -12,5 +12,6 @@ public:
     ~CEventLoop();
     void init(char *thread_name = "main thread");
     void routine();
+    CChannelHandle *getChannelHandle();
 };
 

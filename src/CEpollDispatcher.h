@@ -1,10 +1,12 @@
 #include "CDispatcher.h"
+#define MAXEVENTS 128
+class CEventLoop;
 class CEpollDispatcher : public CDispatcher
 {
 private:
-    /* data */
+    CEventLoop *m_event_loop;
 public:
-    CEpollDispatcher(/* args */);
+    CEpollDispatcher(CEventLoop *event_loop);
     ~CEpollDispatcher();
     int Init(SEventLoop* event_loop) override;
     int Add(SEventLoop* event_loop, SChannel* channel) override;
