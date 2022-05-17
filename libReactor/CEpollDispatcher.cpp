@@ -1,12 +1,13 @@
 #include "CEpollDispatcher.h"
 #include "CEventLoop.h"
-CEpollDispatcher::CEpollDispatcher(CEventLoop *event_loop)
+CEpollDispatcher::CEpollDispatcher(CEventLoop *event_loop) : CDispatcher(event_loop)
 {
     m_event_loop = event_loop;
 }
 
 CEpollDispatcher::~CEpollDispatcher()
 {
+    m_event_loop = nullptr;
 }
 
 int CEpollDispatcher::Init(SEventLoop* event_loop)
@@ -18,6 +19,7 @@ int CEpollDispatcher::Init(SEventLoop* event_loop)
     dispatcherData->nfds = 0;
     dispatcherData->event_fd = epoll_create1(0);
     dispatcherData->events = 0;
+    return 0;
 }
 
 int CEpollDispatcher::Add(SEventLoop* event_loop, SChannel* channel)
@@ -53,7 +55,7 @@ int CEpollDispatcher::Del(SEventLoop* event_loop, SChannel* channel)
     event.events = events;
     if (epoll_ctl(dispatcherData->event_fd, EPOLL_CTL_DEL, fd, &event) == -1)
     {
-        printf("epoll_ctl add fd fail!");
+        printf("epoll_ctl del fd fail!");
     }
     return 0;    
 }
@@ -72,7 +74,7 @@ int CEpollDispatcher::Update(SEventLoop* event_loop, SChannel* channel)
     event.events = events;
     if (epoll_ctl(dispatcherData->event_fd, EPOLL_CTL_MOD, fd, &event) == -1)
     {
-        printf("epoll_ctl add fd fail!");
+        printf("epoll_ctl update fd fail!");
     }
     return 0;    
 }
@@ -93,7 +95,7 @@ int CEpollDispatcher::Dispatch(SEventLoop* event_loop, timeval* time_val)
         if(dispatcherData->events[i].events & EPOLLOUT)
             m_event_loop->getChannelHandle()->eventActivation(dispatcherData->events[i].data.fd, EVENT_WRITE);
     }
-    
+    return 0;
 }
 
 int CEpollDispatcher::Clear(SEventLoop* event_loop)
@@ -103,4 +105,5 @@ int CEpollDispatcher::Clear(SEventLoop* event_loop)
     delete dispatcherData->events;
     delete dispatcherData;
     event_loop->event_dispatcher_data = nullptr;
+    return 0;
 }

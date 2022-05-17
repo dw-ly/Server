@@ -1,5 +1,6 @@
 #include "SDefine.h"
 #include "CChannelHandle.h"
+#include "CDispatcher.h"
 #include "CEpollDispatcher.h"
 
 class CEventLoop
@@ -10,7 +11,7 @@ private:
 public:
     CEventLoop(/* args */);
     ~CEventLoop();
-    void init(char *thread_name = "main thread");
+    void init(const char *thread_name = "main thread");
     void routine();
     CChannelHandle *getChannelHandle();
 };

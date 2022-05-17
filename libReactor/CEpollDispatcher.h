@@ -1,3 +1,4 @@
+#pragma once
 #include "CDispatcher.h"
 #define MAXEVENTS 128
 class CEventLoop;

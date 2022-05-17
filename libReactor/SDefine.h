@@ -1,12 +1,15 @@
+#pragma once
 #include "common.h"
 // #include "CDispatcher.h"
+// struct SEventLoop;
+// struct SChannel;
 
-#define eventInit function<int(SEventLoop*)>
-#define eventAdd function<int(SEventLoop*, SChannel*)>
-#define eventDel function<int(SEventLoop*, SChannel*)>
-#define eventUpdate function<int(SEventLoop*, SChannel*)>
-#define eventDispatch function<int(SEventLoop*, timeval*)>
-#define eventClear function<int(SEventLoop*)>
+// #define eventInit function<int(SEventLoop*)>
+// #define eventAdd function<int(SEventLoop*, SChannel*)>
+// #define eventDel function<int(SEventLoop*, SChannel*)>
+// #define eventUpdate function<int(SEventLoop*, SChannel*)>
+// #define eventDispatch function<int(SEventLoop*, timeval*)>
+// #define eventClear function<int(SEventLoop*)>
 
 #define eventCallBack function<int(void*)>
 
@@ -19,28 +22,28 @@
 /** Wait for a POSIX signal to be raised*/
 #define EVENT_SIGNAL     0x08
 
-struct SEventDispatcher
-{
-    const char* name;
-    SEventLoop *event_loop;
+// struct SEventDispatcher
+// {
+//     const char* name;
+//     SEventLoop *event_loop;
 
-    eventInit event_init;
-    eventAdd event_add;
-    eventDel event_del;
-    eventUpdate event_update;
-    eventDispatch event_dispatch;
-    eventClear event_clear;
-    SEventDispatcher(){};
-    SEventDispatcher(
-        eventInit init, 
-        eventAdd add,
-        eventDel del,
-        eventUpdate update,
-        eventDispatch dispatch,
-        eventClear clear
-    ):event_init(init),event_add(add),event_del(del),event_update(update),event_dispatch(dispatch),event_clear(clear){};
+//     eventInit event_init;
+//     eventAdd event_add;
+//     eventDel event_del;
+//     eventUpdate event_update;
+//     eventDispatch event_dispatch;
+//     eventClear event_clear;
+//     SEventDispatcher(){};
+//     // SEventDispatcher(
+//     //     eventInit init, 
+//     //     eventAdd add,
+//     //     eventDel del,
+//     //     eventUpdate update,
+//     //     eventDispatch dispatch,
+//     //     eventClear clear
+//     // ):event_init(init),event_add(add),event_del(del),event_update(update),event_dispatch(dispatch),event_clear(clear){};
 
-};
+// };
 /*
 struct SEventDispatcher
 {

@@ -3,7 +3,7 @@
 CEventLoop::CEventLoop(/* args */)
 {
     m_event_loop = new SEventLoop;
-    init();
+    this->init("main thread");
 }
 
 CEventLoop::~CEventLoop()
@@ -19,10 +19,10 @@ CEventLoop::~CEventLoop()
     delete m_event_loop;
 }
 
-void CEventLoop::init(char *thread_name)
+void CEventLoop::init(const char *thread_name)
 {
     
-    m_event_loop->thread_name = thread_name;
+    m_event_loop->thread_name = const_cast<char*>(thread_name);
     m_event_loop->owner_thread_id = pthread_self();
     if (socketpair(AF_UNIX, SOCK_STREAM, 0, m_event_loop->socketPair) < 0) {
 

@@ -3,6 +3,7 @@ project(server)
 
 add_subdirectory(src)
 add_subdirectory(libThreadPool)
+add_subdirectory(libReactor)
 add_definitions(-std=c++11)
 #SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-pthread")
 #include(CheckCXXCompilerFlag)
