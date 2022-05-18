@@ -14,5 +14,11 @@ public:
     void init(const char *thread_name = "main thread");
     void routine();
     CChannelHandle *getChannelHandle();
+    int addEventLoopHandle(int fd, SChannel *channel);
+    int updateEventLoopHandle(int fd, SChannel *channel);
+    int removeEventLoopHandle(int fd, SChannel *channel);
+
+    int wakeUpEventLoop();
+    int wakeUpHandle();
 };
 

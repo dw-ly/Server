@@ -102,7 +102,7 @@ int CEpollDispatcher::Clear(SEventLoop* event_loop)
 {
     SEpollDispatcherData *dispatcherData = (SEpollDispatcherData*)event_loop->event_dispatcher_data;
     close(dispatcherData->event_fd);
-    delete dispatcherData->events;
+    // delete dispatcherData->events;
     delete dispatcherData;
     event_loop->event_dispatcher_data = nullptr;
     return 0;

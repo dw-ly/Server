@@ -1,11 +1,11 @@
 #pragma once
 #include "CDispatcher.h"
 #define MAXEVENTS 128
-class CEventLoop;
+// class CEventLoop;
 class CEpollDispatcher : public CDispatcher
 {
 private:
-    CEventLoop *m_event_loop;
+    // CEventLoop *m_event_loop;
 public:
     CEpollDispatcher(CEventLoop *event_loop);
     ~CEpollDispatcher();
