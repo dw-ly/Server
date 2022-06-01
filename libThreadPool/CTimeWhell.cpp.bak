@@ -1,0 +1,25 @@
+#include "CTimeWhell.h"
+
+CTimeWhell::CTimeWhell(/* args */)
+{
+}
+
+CTimeWhell::~CTimeWhell()
+{
+}
+
+void CTimeWhell::Init()
+{
+    for (int i = 0; i < WhellNum; i++)
+    {
+        timeWhell[i] = new STimeWhell;
+        timeWhell[i]->head = new STaskLists;
+        for (size_t i = 0; i < whellNums[i]; i++)
+        {
+            STaskLists* tasks = new STaskLists;
+        }
+        
+        
+    }
+    
+}

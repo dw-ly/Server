@@ -1,0 +1,35 @@
+#pragma once
+#include "CThreadPool.h"
+#define WhellNum 4
+
+struct SNode
+{
+    int expire = 0;
+    SNode* next = nullptr;
+};
+
+struct STaskLists
+{
+    SNode* head;
+    SNode* tail = nullptr;
+    STaskLists* next = nullptr;
+};
+
+struct STimeWhell
+{
+    STaskLists* head;
+    STaskLists* tail;
+};
+
+class CTimeWhell
+{
+private:
+    STimeWhell* timeWhell[WhellNum];
+    int whellNums[WhellNum] = {60, 60, 24,7};
+public:
+    CTimeWhell(/* args */);
+    ~CTimeWhell();
+    void Init();
+};
+
+
