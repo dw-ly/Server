@@ -17,6 +17,7 @@ int main()
     CWhellMgr* mgr = new CWhellMgr;
     // mgr->onTimeWhellStart();
     mgr->onAddTask(15, 1, [](){printf("task\n");});
+    mgr->onAddTask(15, 2, [](){printf("task\n");});
     mgr->onTimeWhellStart();
     // CTimer* timer = CTimer::GetInstance();
     // timer->start([](){printf("test\n");});

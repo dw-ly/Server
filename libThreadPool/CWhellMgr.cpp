@@ -59,7 +59,16 @@ void CWhellMgr::onAddTask(int time, int task_id, Task task)
         idx.emplace_back(tmp % ONE_WHELL_STEP);
     }
     printf("CWhellMgr::onAddTask idx[%d,%d,%d]\n",idx[0], idx[1], idx[2]);
-    m_task_map.emplace(task_id, make_tuple(idx, task));
+    //添加任务到map中，当前撞task_id会替换
+    if (m_task_map.find(task_id) != m_task_map.end())
+    {
+        m_task_map[task_id] = make_tuple(idx, task);
+    }
+    else
+    {
+        m_task_map.emplace(task_id, make_tuple(idx, task));
+    }
+
     for (int i = WHELL_NUM - 1; i >= 0; i--)
     {
         if (idx[i] != 0)
