@@ -1,49 +1,33 @@
 #pragma once
 #include <map>
 #include <set>
+#include <vector>
 #include <cmath>
 #include <assert.h>
 #include "CThreadPool.h"
 #include "CTimer.h"
 
-#define OneWhell 8
-#define UpperWhellNum 2 
-#define WhellNum 3 
-using task = function<void()>;
-struct STimeWhell
-{
-    int m_index;
-    int m_step;
-    set<int/*task_id*/> m_task_lists[OneWhell];
-};
-
 class CTimeWhell
 {
-private:    
-    int64_t m_init_time;
-    int64_t m_max_during_time;
-    int m_current_index[WhellNum] = {0};
-    
-    STimeWhell m_whell[WhellNum];
-    CTimer* m_timer;
-
-    map<int/*task_id*/, int[WhellNum] /*index[WhellNum]*/> m_task_record;          //任务信息记录
-    map<int/*task_id*/, task> m_task_map;                                 //任务函数
-    
-    map<int/*task_id*/, pair<int/*delay_time*/, task>> m_wait_add_tasks;  //待添加任务列表
+private:
+    /* data */
 public:
-    CTimeWhell(/* args */);
+    int m_step_num; //总步数
+    int m_step;     //当前步数
+    int m_plies;    //时间轮层数
+    string m_name;
+    vector<set<int>> m_whell_task_list;
+    // set<pair<int,int>> m_task_time;
+    function<void()> m_step_call_back;      //当前时间轮走完一圈时触发的回调函数
+    function<void(CTimeWhell*)> m_task_call_back;   //当前时间轮每走一步触发的回调函数
+    CTimeWhell(int step_num, string name, int plies);
     ~CTimeWhell();
-    void Init();
-    void addTask(int64_t time, int task_id, task one);
-    void addTask(int during, int task_id, task one);
+    void getNowTaskIds(set<int>& task_ids);
+    void onStep();
+    void onAddTask(int task_id, int step);
+    void onAddTask(set<int> task_ids, int step);
 
-    int64_t getCurrentTime();
-    int64_t getEndTime();
-    void getIndexs(int during, int* indexs);
-    int getDuring(int* indexs);
-    void check();
-    void routine();
-};
-
-
+    void setCallback(function<void()> callback);
+    void setTaskCallback(function<void(CTimeWhell*)> callback);
+    // void onCircle();
+}; 
