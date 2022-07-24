@@ -11,8 +11,8 @@
 #include <sys/prctl.h>
 #include <atomic>
 using namespace std;
-#define MAX_THREAD_NUM 8;//thread::hardware_concurrency();
-using Task = function<void()>;
+#define MAX_THREAD_NUM 4;//thread::hardware_concurrency();
+using Task = function<void()>; 
 class CThreadPool
 {
 public:
@@ -24,12 +24,12 @@ public:
     std::mutex m_lock;
     std::condition_variable cv;
 public:
-    CThreadPool();
+    CThreadPool(); 
     ~CThreadPool();
     void initThread(int size);
     void start();
     void stop();
-    void addTask(Task task, void* args/*test*/);
+    void addTask(Task task/*, void* argstest*/);
     void rountine(int tid);
 };
 

@@ -52,7 +52,7 @@ CThreadPool::~CThreadPool()
     // }
 }
 
-void CThreadPool::addTask(Task task, void* args)
+void CThreadPool::addTask(Task task/*, void* args*/)
 {
     unique_lock<std::mutex> lk(m_lock);
     // printf("this is add_task:%d\n", num);
@@ -81,8 +81,9 @@ void CThreadPool::rountine(int tid)
             time_out ++;
             cv.wait_for(lk, chrono::seconds(5));//设置超时
             sleep(0);
-            if (time_out >= 5)
+            if (time_out >= 100)
             {
+                printf("time_out");
                 return;
             }
             

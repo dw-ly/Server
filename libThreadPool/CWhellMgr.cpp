@@ -2,13 +2,18 @@
 
 CWhellMgr::CWhellMgr(/* args */)
 {
-    for (int i = 0; i < WHELL_NUM; i++)
-    {
-        m_time_whell[i] = new CTimeWhell(ONE_WHELL_STEP, "", i);
-    }
-    m_time_whell[0]->m_name = "s";
-    m_time_whell[1]->m_name = "min";
-    m_time_whell[2]->m_name = "h";
+    // for (int i = 0; i < WHELL_NUM; i++)
+    // {
+    //     m_time_whell[i] = new CTimeWhell(ONE_WHELL_STEP, "", i);
+    // }
+    // m_time_whell[0]->m_name = "s";
+    // m_time_whell[1]->m_name = "min";
+    // m_time_whell[2]->m_name = "h";
+    m_time_whell[0] = new CTimeWhell(ONE_WHELL_STEP, "s", 0);
+    m_time_whell[1] = new CTimeWhell(ONE_WHELL_STEP, "min", 1);
+    m_time_whell[2] = new CTimeWhell(ONE_WHELL_STEP_HOUR, "h", 2);
+
+    m_thread_pool = new CThreadPool();
 }
 
 CWhellMgr::~CWhellMgr()
@@ -17,7 +22,7 @@ CWhellMgr::~CWhellMgr()
     {
         delete m_time_whell[i];
     }
-    
+    delete m_thread_pool;
 }
 
 void CWhellMgr::onTimeWhellStart()
@@ -60,6 +65,7 @@ void CWhellMgr::onAddTask(int time, int task_id, Task task)
     }
     printf("CWhellMgr::onAddTask idx[%d,%d,%d]\n",idx[0], idx[1], idx[2]);
     //添加任务到map中，当前撞task_id会替换
+    m_mutex.lock();
     if (m_task_map.find(task_id) != m_task_map.end())
     {
         m_task_map[task_id] = make_tuple(idx, task);
@@ -68,7 +74,7 @@ void CWhellMgr::onAddTask(int time, int task_id, Task task)
     {
         m_task_map.emplace(task_id, make_tuple(idx, task));
     }
-
+    m_mutex.unlock();
     for (int i = WHELL_NUM - 1; i >= 0; i--)
     {
         if (idx[i] != 0)
@@ -90,9 +96,12 @@ void CWhellMgr::onDoTask(set<int> task_ids)
     {
         if (m_task_map.find(task_id) != m_task_map.end())
         {
-            get<1>(m_task_map[task_id])();
+            m_mutex.lock();
+            m_thread_pool->addTask(get<1>(m_task_map[task_id]));
+            // get<1>(m_task_map[task_id])();
             printf("onDoTask:%d\n", task_id);
             m_task_map.erase(task_id);
+            m_mutex.unlock();
         }
     }
 }
